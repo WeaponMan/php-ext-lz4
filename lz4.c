@@ -165,7 +165,7 @@ PHP_FUNCTION(confirm_lz4_compiled)
 	}
 
 	len = spprintf(&strg, 0, "Congratulations! You have successfully modified ext/%.78s/config.m4. Module %.78s is now compiled into PHP.", "lz4", arg);
-	RETURN_STRINGL(strg, len, 0);
+	RETURN_STRINGL(strg, len);
 }
 /* }}} */
 
@@ -187,7 +187,7 @@ PHP_FUNCTION(lz4_compress)
 		RETURN_FALSE;
 	}
 	if (lz4_compress(source_str, source_str_len, dest_str, &dest_str_len) == LZ4_OK) {
-		RETVAL_STRINGL(dest_str, dest_str_len, 1);
+		RETVAL_STRINGL(dest_str, dest_str_len);
 	} else {
 		RETVAL_FALSE;
 	}
@@ -215,7 +215,7 @@ PHP_FUNCTION(lz4_uncompress)
 		RETURN_FALSE;
 	}
 	if (lz4_uncompress(source_str, source_str_len, dest_str, &dest_str_len) == LZ4_OK) {
-		RETVAL_STRINGL(dest_str, dest_str_len, 1);
+		RETVAL_STRINGL(dest_str, dest_str_len);
 	} else {
 		RETVAL_FALSE;
 	}
