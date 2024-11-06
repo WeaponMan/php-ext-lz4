@@ -39,10 +39,23 @@ static int le_lz4;
  *
  * Every user visible function must have an entry in lz4_functions[].
  */
+
+ ZEND_BEGIN_ARG_INFO_EX(arg_info_lz4_compress, 0, 0, 0)
+ 	ZEND_ARG_INFO(0, data)
+ ZEND_END_ARG_INFO()
+
+ ZEND_BEGIN_ARG_INFO_EX(arg_info_lz4_uncompress, 0, 0, 0)
+ 	ZEND_ARG_INFO(0, data)
+ ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arg_info_confirm_lz4_compiled, 0, 0, 0)
+	ZEND_ARG_INFO(0, arg)
+ZEND_END_ARG_INFO()
+
 const zend_function_entry lz4_functions[] = {
-	PHP_FE(confirm_lz4_compiled,	NULL)		/* For testing, remove later. */
-	PHP_FE(lz4_compress, 	NULL)
-	PHP_FE(lz4_uncompress, 	NULL)
+	PHP_FE(confirm_lz4_compiled, arg_info_confirm_lz4_compiled)		/* For testing, remove later. */
+	PHP_FE(lz4_compress, 	arg_info_lz4_compress)
+	PHP_FE(lz4_uncompress, 	arg_info_lz4_uncompress)
 	PHP_FE_END	/* Must be the last line in lz4_functions[] */
 };
 /* }}} */
@@ -96,7 +109,7 @@ static void php_lz4_init_globals(zend_lz4_globals *lz4_globals)
  */
 PHP_MINIT_FUNCTION(lz4)
 {
-	/* If you have INI entries, uncomment these lines 
+	/* If you have INI entries, uncomment these lines
 	REGISTER_INI_ENTRIES();
 	*/
 	return SUCCESS;
@@ -160,7 +173,7 @@ PHP_FUNCTION(confirm_lz4_compiled)
 	int arg_len, len;
 	char *strg;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &arg, &arg_len) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "s", &arg, &arg_len) == FAILURE) {
 		return;
 	}
 
@@ -175,7 +188,7 @@ PHP_FUNCTION(lz4_compress)
 	char *source_str = NULL, *dest_str = NULL;
 	long source_str_len = 0, dest_str_len = 0, max_dest_str_len = 0;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &source_str, &source_str_len) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "s", &source_str, &source_str_len) == FAILURE) {
 		RETURN_FALSE;
 	}
 
@@ -200,7 +213,7 @@ PHP_FUNCTION(lz4_uncompress)
 {
 	char *source_str = NULL, *dest_str = NULL;
 	long source_str_len = 0, dest_str_len = 0, max_uncompress_len = 0;
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &source_str, &source_str_len) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "s", &source_str, &source_str_len) == FAILURE) {
 		RETURN_FALSE;
 	}
 
@@ -223,9 +236,9 @@ PHP_FUNCTION(lz4_uncompress)
 }
 /* }}} */
 
-/* The previous line is meant for vim and emacs, so it can correctly fold and 
-   unfold functions in source code. See the corresponding marks just before 
-   function definition, where the functions purpose is also documented. Please 
+/* The previous line is meant for vim and emacs, so it can correctly fold and
+   unfold functions in source code. See the corresponding marks just before
+   function definition, where the functions purpose is also documented. Please
    follow this convention for the convenience of others editing your code.
 */
 
